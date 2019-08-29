@@ -129,7 +129,8 @@ public class FieldSerializer implements Comparable<FieldSerializer> {
         SerializeWriter out = serializer.out;
 
         if (out.quoteFieldNames) {
-            if (out.useSingleQuotes) {
+
+            if (SerializerFeature.isEnabled(out.features, fieldInfo.serialzeFeatures, SerializerFeature.UseSingleQuotes)) {
                 if (single_quoted_fieldPrefix == null) {
                     single_quoted_fieldPrefix = '\'' + fieldInfo.name + "\':";
                 }

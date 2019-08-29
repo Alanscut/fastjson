@@ -414,9 +414,11 @@ public class JavaBeanSerializer extends SerializeFilterable implements ObjectSer
                     }
                     serializer.write(propertyValue);
                 } else {
+                	int mask = fieldInfo.serialzeFeatures & SerializerFeature.UseSingleQuotes.mask;
+                	boolean fieldUseSingleQuotes = (mask == 0) ? false : true;
                     if (!writeAsArray) {
                         if (writeClassName || !fieldInfo.unwrapped) {
-                            if (directWritePrefix) {
+                            if (directWritePrefix && !fieldUseSingleQuotes) {
                                 out.write(fieldInfo.name_chars, 0, fieldInfo.name_chars.length);
                             } else {
                                 fieldSerializer.writePrefix(serializer);
@@ -437,7 +439,7 @@ public class JavaBeanSerializer extends SerializeFilterable implements ObjectSer
                             } else {
                                 String propertyValueString = (String) propertyValue;
 
-                                if (out.useSingleQuotes) {
+                                if (out.useSingleQuotes || fieldUseSingleQuotes) {
                                     out.writeStringWithSingleQuote(propertyValueString);
                                 } else {
                                     out.writeStringWithDoubleQuote(propertyValueString, (char) 0);
